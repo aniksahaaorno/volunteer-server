@@ -6,8 +6,8 @@ require('dotenv').config();
 
 const MongoClient = require('mongodb').MongoClient;
 
-
-const uri = "mongodb+srv://aniksahaaorno:..gamechangeranik..@cluster0.3fkvj.mongodb.net/volunteerWebsite?retryWrites=true&w=majority";
+console.log(process.env.DB_USER)
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.3fkvj.mongodb.net/volunteerWebsite?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true,useUnifiedTopology: true });
 
 
@@ -28,10 +28,18 @@ client.connect(err => {
       .then(result => {
           console.log('one product added');
           res.send(result. insertedCount>0 );
-          console.log(result);
+         
       })
 
   })
+
+  app.get('/userInfo',(req, res) => {
+    collection.find({})
+    .toArray((err,documents)=>{
+        res.send(documents[0]);
+    })
+})
+
 
   app.get('/details/:loggedInUser',(req, res) => {
       collection.find({email:req.params.loggedInUser})
@@ -40,14 +48,17 @@ client.connect(err => {
       })
   })
 
-  app.delete('/delete/:id'),(req,res) =>{
-      console.log(req.body);
+  app.delete('/delete/:id', (req,res) =>{
+   
+      console.log(req.params.id);
       collection.deleteOne({_id:ObjectId(req.params.id)})
       .then(result =>{
           console.log(result);
-      })
+          
+      });
+      
 
-  }
+  })
 
 });
 
