@@ -17,7 +17,7 @@ const app = express()
 app.use(bodyParser.json());
 app.use(cors());
 
-
+const port = 5000;
 
 client.connect(err => {
   const collection = client.db("volunteerWebsite").collection("volunteerDetails");
@@ -66,4 +66,4 @@ client.connect(err => {
 
 
 
-app.listen(5000);
+app.listen(process.env.PORT || port);
